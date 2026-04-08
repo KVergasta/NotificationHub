@@ -1,7 +1,6 @@
 # 🚀 NotificationHub API
 
-Uma API robusta e escalável desenvolvida em **Java 17** e **Spring Boot 3** para centralizar o envio de notificações através de múltiplos canais (E-mail, Push, SMS e WhatsApp).
-
+09501
 ## 🛠️ Tecnologias Utilizadas
 
 * **Linguagem:** Java 17

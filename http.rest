@@ -3,18 +3,19 @@ POST http://localhost:8000/notification/generator
 Content-Type: application/json
 
 {
-  "infoUser": "kauvergasta12@gmail.com",
-  "title": "Encomenda chegou",
+  "infoUser": "kauvrgst@gmail.com",
+  "title": "Mensagem API de kakau",
   "type": "E",
-  "message": "Beltrano sua encomenda chegou"
+  "message": "Sua best mandou lembrança"
 }
 ####
 POST http://localhost:8000/notification/generator
 Content-Type: application/json
 
 {
+  "infoUser": "botelhojulia62@gmail.com",
   "title": "Encomenda chegue em 3 dias",
-  "type": "W",
+  "type": "E",
   "message": "Fulaninho de tal sua encomenda está a caminho"
 }
 ####
@@ -22,6 +23,7 @@ POST http://localhost:8000/notification/generator
 Content-Type: application/json
 
 {
+  "infoUser":"fcf",
   "title": "Encomenda atrasada",
   "type": "W",
   "message": "Ciclano sua encomenda atrasou"
@@ -51,5 +53,6 @@ GET http://localhost:8000/notification/listNotifications
 DELETE  http://localhost:8000/notification/c7220cfc-caaa-4bc8-9bf6-17058b051df7
 ###
 GET http://localhost:8000/notification/listChannels
-
+###
+GET http://localhost:8000/h2-console
 

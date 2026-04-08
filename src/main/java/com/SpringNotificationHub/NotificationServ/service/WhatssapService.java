@@ -15,8 +15,8 @@ import lombok.Setter;
 public class WhatssapService implements BroadcastChannel{
 
     @Override
-    public String send(NotificationEntity message, String info) {
-        return  message.getMessage() + info;
+    public String send(NotificationEntity message) {
+        return  message.getMessage();
     }
     
     @Override
