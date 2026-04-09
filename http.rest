@@ -23,10 +23,10 @@ POST http://localhost:8000/notification/generator
 Content-Type: application/json
 
 {
-  "infoUser":"fcf",
-  "title": "Encomenda atrasada",
-  "type": "W",
-  "message": "Ciclano sua encomenda atrasou"
+  "infoUser":"sergiomagnunrodrigues@gmail.com",
+  "title": "Notificação da filhota",
+  "type": "E",
+  "message": "Amanhã você dá carona a filhinha e dia 17/04 às 9h tenho consulta na SMART AUDIUS"
 }
 ####
 POST http://localhost:8000/notification/generator

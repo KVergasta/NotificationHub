@@ -47,7 +47,7 @@ public GeneratorNotification(TypeRepository typeRepository,
             .map(channel -> {
                 channel.send(notification);
                 // sendMail(notification, "kauvergasta12@gmail.com");
-                return "Sucesso"; // Ou o retorno que seu canal der
+                return "Sucess"; // Ou o retorno que seu canal der
             })
             .orElseThrow(() -> new RuntimeException("No channel found for type: " + notification.getType()));
     }
