@@ -14,8 +14,8 @@ public class PushService implements BroadcastChannel{
     private String numero;
 
     @Override
-     public String send(NotificationEntity message, String info) {
-        return  message.getMessage() + info ;
+     public String send(NotificationEntity message) {
+        return  message.getMessage();
     }
 
      @Override

@@ -13,8 +13,8 @@ import com.SpringNotificationHub.NotificationServ.model.ChannelType;
 public class SmsService implements BroadcastChannel{
 
     @Override
-     public String send(NotificationEntity message, String info) {
-        return  message.getMessage() + info;
+     public String send(NotificationEntity message) {
+        return  message.getMessage();
     }
 
      @Override
