@@ -27,7 +27,7 @@ class NotificationServApplicationTests {
 		NotificationEntity emailNotification = new NotificationEntity();
 		NotificationEntity smsNotificacao = new NotificationEntity();
 
-		EmailService email = new EmailService();
+		// EmailService email = new EmailService();
 		SmsService sms = new SmsService();
 
 		// GeneratorNotification gerenciador =  new GeneratorNotification(canal);
@@ -38,16 +38,16 @@ class NotificationServApplicationTests {
 		
 
 		// smsNotificacao.setType(ChannelType.SMS);
-		smsNotificacao.setMessage("mensagem do sms");
+		// smsNotificacao.setMessage("mensagem do sms");
 		
-		sms.setNumero("719865925006");
-		sms.type();
+		// sms.setNumero("719865925006");
+		// sms.type();
 
-		email.setEnderecoEmail("kauvergasta@gmail.com");
-		email.type();
+		// email.setEnderecoEmail("kauvergasta@gmail.com");
+		// email.type();
 
 
-		canal.add(email);
+		// canal.add(email);
 		canal.add(sms);
 
 		

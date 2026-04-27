@@ -43,8 +43,9 @@ POST http://localhost:8000/notification/generator
 Content-Type: application/json
 
 {
+  "infoUser": "notif.hub@outlook.com",
   "title": "Encomenda Adiada novamente",
-  "type": "S" ,
+  "type": "E" ,
   "message": "José Almeida, ocorreu a tentativa de entrega, mas ninguém recebeu"
 }
 ###
