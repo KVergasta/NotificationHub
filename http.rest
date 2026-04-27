@@ -26,17 +26,18 @@ Content-Type: application/json
   "infoUser":"sergiomagnunrodrigues@gmail.com",
   "title": "Notificação da filhota",
   "type": "E",
-  "message": "Amanhã você dá carona a filhinha e dia 17/04 às 9h tenho consulta na SMART AUDIUS"
+  "message": "Hello - Moshi Moshi"
 }
 ####
 POST http://localhost:8000/notification/generator
 Content-Type: application/json
 
 {
-  "infoUser": "kauvergasta12@gmail.com",
-  "title": "Encomenda chegou",
+  "infoUser": "silvarodrigues0817@gmail.com",
+  # "infoUser": "kauvergasta12@gmail.com",
+  "title": "Notificação de kakau",
   "type": "E" ,
-  "message": "Fulana sua encomenda chegou"
+  "message": "Que o seu dia seja cheio de alegria :) ksksksk"
 }
 ####
 POST http://localhost:8000/notification/generator
