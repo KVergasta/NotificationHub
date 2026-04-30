@@ -11,25 +11,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "TYPE_ENTITY")
+@NoArgsConstructor
+@Table(name = "type_entity")
 public class TypeEntity implements Serializable {
+    public TypeEntity(String type) {
+        this.type = type;
+    }
+
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(nullable = false, name = "type")
-    private ChannelType type;
+    @Column(nullable = false, name = "type", unique = true)
+    private String type;
     
-    @Column(nullable = false, name = "code")
-    private ChannelType code;
-
 }

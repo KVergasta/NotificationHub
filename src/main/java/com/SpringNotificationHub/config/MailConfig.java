@@ -22,8 +22,6 @@ public class MailConfig {
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        // Isso vai imprimir toda a conversa entre sua API e o Outlook no console
-mailSender.getJavaMailProperties().put("mail.debug", "true");
         return mailSender;
     
     }
@@ -42,9 +40,6 @@ mailSender.getJavaMailProperties().put("mail.debug", "true");
         props.put("mail.smtp.ssl.protocols", "TLSv1.2");
         props.put("mail.smtp.ssl.trust", "smtp.office365.com");    
         props.put("mail.smtp.starttls.required", "true");
-        // Isso vai imprimir toda a conversa entre sua API e o Outlook no console
-mailSender.getJavaMailProperties().put("mail.debug", "true");
-
         return mailSender;
     }
 

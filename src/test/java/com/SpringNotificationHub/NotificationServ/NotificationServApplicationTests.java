@@ -4,16 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.Import;
-
 import com.SpringNotificationHub.NotificationServ.model.BroadcastChannel;
 import com.SpringNotificationHub.NotificationServ.model.NotificationEntity;
-import com.SpringNotificationHub.NotificationServ.model.ChannelType;
-import com.SpringNotificationHub.NotificationServ.service.EmailService;
-import com.SpringNotificationHub.NotificationServ.service.GeneratorNotification;
 import com.SpringNotificationHub.NotificationServ.service.SmsService;
 
-@Import(TestcontainersConfiguration.class)
 class NotificationServApplicationTests {
 
 	@Test

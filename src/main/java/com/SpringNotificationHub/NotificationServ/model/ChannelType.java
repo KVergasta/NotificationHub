@@ -34,4 +34,5 @@ public enum ChannelType {
         }
         throw new FieldNotAccetableException("Invalid channel type code: " + code);
     }
+
 }

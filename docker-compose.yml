@@ -1,16 +1,18 @@
+version: '3.8'
+
 services:
   db:
-    image: postgres:15-alpine
-    container_name: postgresAPI
+    image: postgres:16-alpine
+    container_name: postgres_16
     restart: always
     environment:
-      POSTGRES_USER: user_hub
-      POSTGRES_PASSWORD: password_hub
-      POSTGRES_DB: postgresAPI
-    ports: 
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root123
+      POSTGRES_DB: databaseAPI
+    ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
 
   kafka:
     image: apache/kafka:latest
@@ -36,6 +38,6 @@ services:
     restart: always
 
 volumes:
-  postgres_data:
+  pgdata:
   kafka_data:
   redis_data:
