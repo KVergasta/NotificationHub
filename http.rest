@@ -25,7 +25,7 @@ Content-Type: application/json
 {
   "infoUser":"sergiomagnunrodrigues@gmail.com",
   "title": "Notificação da filhota",
-  "type": "E",
+  "type": "W",
   "message": "Hello - Moshi Moshi"
 }
 ####
@@ -46,7 +46,8 @@ Content-Type: application/json
   "infoUser": "kauvergasta@hotmail.com",
   "title": "SMTP - HOTMAIL",
   "type": "P" ,
-  "message": "Hotmail teste"
+  "message": "Hotmail teste",
+  "status": "SENT"
 }
 ####
 POST http://localhost:8000/notification/generator
@@ -58,10 +59,23 @@ Content-Type: application/json
   "type": "E" ,
   "message": "Outlook teste"
 }
+####
+POST http://localhost:8000/notification/generator
+Content-Type: application/json
+
+{
+  "infoUser": "teste",
+  "title": "sei la",
+  "type": "P" ,
+  "message": "teste",
+  "status": "FAILED"
+}
 ###
 GET http://localhost:8000/notification/listNotifications
 ###
-DELETE  http://localhost:8000/notification/b122c66b-30cd-4fa9-9289-b6753656259e
+DELETE  http://localhost:8000/notification/61cf1fa4-c7a7-43bc-bd49-117c7151f7e6
+###
+GET   http://localhost:8000/notification/61cf1fa4-c7a7-43bc-bd49-117c7151f7e6
 ###
 GET http://localhost:8000/notification/listChannels
 ###

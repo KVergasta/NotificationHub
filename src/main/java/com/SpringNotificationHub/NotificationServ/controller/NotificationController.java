@@ -66,6 +66,14 @@ public class NotificationController {
             .body(generatorNotification.getAllNotifications());
         }
 
+@GetMapping("/{id}")
+        public ResponseEntity<NotificationEntity> findNotification(@PathVariable("id") UUID id){
+            return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(generatorNotification.findNotification(id)
+            .orElseThrow(() -> new NotFoundException("Notification not found with id: " + id)));
+        }
+        
 @PostMapping("/create")
         public ResponseEntity<NotificationEntity> createNotification(@RequestBody NotificationEntity notificationEntity){
             return ResponseEntity
