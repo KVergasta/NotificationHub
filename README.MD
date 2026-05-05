@@ -1,15 +1,15 @@
 # 🚀 NotificationHub API
 
-09501
 ## 🛠️ Tecnologias Utilizadas
 
 * **Linguagem:** Java 17
 * **Framework:** Spring Boot 3.x
-* **Banco de Dados:** H2 (Em memória para desenvolvimento)
+* **Banco de Dados:** PostegresSQL (Container)
 * **Persistência:** Spring Data JPA / Hibernate
 * **Comunicação:** Spring Mail (SMTP/Gmail)
 * **Produtividade:** Lombok
-* **Ferramentas:** Maven, Jackson (JSON handling)
+* **Ferramentas:** Maven, Jackson (JSON handling), Docker ()
+
 
 ## 🏗️ Arquitetura e Design Patterns
 
@@ -25,11 +25,6 @@ O projeto utiliza o **Strategy Pattern** para permitir a extensibilidade de cana
 * JDK 17
 * Maven 3.x
 
-### Configuração do E-mail (Gmail)
-Para enviar e-mails reais, você deve configurar as variáveis de ambiente ou editar o `src/main/resources/application.properties`:
 
-```properties
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-spring.mail.username=seu-email@gmail.com
-spring.mail.password=sua-senha-de-app-de-16-digitos
+
+https://aiven.io/tools/kafka-visualization
