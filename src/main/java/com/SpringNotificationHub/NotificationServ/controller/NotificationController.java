@@ -1,6 +1,5 @@
 package com.SpringNotificationHub.NotificationServ.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ import com.SpringNotificationHub.NotificationServ.model.BroadcastChannel;
 import com.SpringNotificationHub.NotificationServ.model.NotificationEntity;
 import com.SpringNotificationHub.NotificationServ.model.TypeEntity;
 import com.SpringNotificationHub.NotificationServ.service.GeneratorNotification;
-import com.SpringNotificationHub.NotificationServ.service.StreamService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -39,7 +37,7 @@ public class NotificationController {
     @Autowired
     private List<BroadcastChannel> broadcastChannel;
 
-@PostMapping("/generator")
+@PostMapping("/mail")
     public ResponseEntity<?> notification (
         @RequestBody NotificationEntity notificationEntity,
         HttpServletRequest request
@@ -64,18 +62,43 @@ public class NotificationController {
             .body(response);
         }
 
+@PostMapping("/push")
+    public ResponseEntity<?> pushNotification (
+        @RequestBody NotificationEntity notificationEntity,
+        HttpServletRequest request
+    ){
+            String ipAddress = request.getRemoteAddr();
+
+            BroadcastChannel bc = broadcastChannel.stream()
+            .filter(channel -> channel.type() == notificationEntity.getType())
+            .findFirst()
+            .orElseThrow(() -> new NotFoundException("Channel not found for type: " + notificationEntity.getType()));
+
+            String type = bc.type().name();
+            String resultMessage = generatorNotification.generatorMsg(notificationEntity, ipAddress);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("message", resultMessage);
+
+            return ResponseEntity
+            .status(HttpStatus.ACCEPTED)
+            .header("Channel", type)
+            .header("title", notificationEntity.getTitle())
+            .body(response);
+        }
+
+@GetMapping("/todayByIp")
+    public ResponseEntity<List<NotificationEntity>> getToday(HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        return ResponseEntity.ok(generatorNotification.getMyTodayNotifications(ipAddress));
+}
+        
 @GetMapping("/listChannels")
         public ResponseEntity<List<TypeEntity>> getAllTypes(){
             return ResponseEntity
             .status(HttpStatus.OK)
             .body(generatorNotification.getAllTypes());
         }
-
-    @GetMapping("/todayByIp")
-    public ResponseEntity<List<NotificationEntity>> getToday(HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        return ResponseEntity.ok(generatorNotification.getMyTodayNotifications(ipAddress));
-    }
 
 @GetMapping("/listAllNotifications")
         public ResponseEntity<List<NotificationEntity>> getAllNotifications(){

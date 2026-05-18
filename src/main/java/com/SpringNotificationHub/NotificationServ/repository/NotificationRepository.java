@@ -12,8 +12,7 @@ import com.SpringNotificationHub.NotificationServ.model.NotificationEntity;
 
 public interface NotificationRepository extends JpaRepository<NotificationEntity, UUID> {
 
-    @Query("SELECT n FROM NotificationEntity n WHERE n.userIp = :ip " + 
-           "AND n.date >= :startDay AND n.date <= :endDay")
+@Query("SELECT n FROM NotificationEntity n WHERE n.userIp = :ip " + "AND n.date >= :startDay AND n.date <= :endDay")
     List<NotificationEntity> findTodayNotificationsByIp(
         @Param("ip") String ip, 
         @Param("startDay") LocalDateTime start,

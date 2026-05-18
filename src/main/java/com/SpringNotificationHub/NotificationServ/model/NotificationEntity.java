@@ -46,7 +46,7 @@ public class NotificationEntity implements Serializable {
     @Column(name = "user_account", nullable = false)
     private String infoUser;
 
-    @Column(name = "date", nullable=false)
+    @Column(name = "date", nullable = false)
     private LocalDateTime date;
 
     @Column(name = "user_ip")

@@ -51,7 +51,6 @@ public GeneratorNotification(TypeRepository typeRepository,
             .filter(channel -> channel.type() == notification.getType())
             .findFirst()
             .map(channel -> {
-                // this.saveNotification(notification);
                 streamService.sendMessage(notification);
                 return "Message status: " + notification.getStatus().toString();
             })

@@ -9,6 +9,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
+import com.SpringNotificationHub.NotificationServ.model.ChannelType;
 import com.SpringNotificationHub.NotificationServ.model.NotificationEntity;
 import com.SpringNotificationHub.NotificationServ.model.StatusType;
 import com.SpringNotificationHub.NotificationServ.repository.NotificationRepository;
@@ -24,6 +25,9 @@ public class StreamService {
     private EmailService emailService;
 
     @Autowired
+    private PushService pushService;
+
+    @Autowired
     private NotificationRepository notificationRepository;
 
     public StreamService(KafkaTemplate<String, NotificationEntity> kafkaTemplate) {
@@ -33,12 +37,16 @@ public class StreamService {
     @SuppressWarnings("null")
     public String sendMessage(NotificationEntity message) {
         int partition = random.nextInt(2); // Randomly select partition 0 or 1
-        kafkaTemplate.send("notification-stream", partition, null, message);
+        if (message.getType() == ChannelType.EMAIL) {
+            kafkaTemplate.send("notification-stream-mail", partition, null, message);
+        } else {
+            kafkaTemplate.send("notification-stream-push", partition, null, message);
+        }
         return message.getStatus().toString();
     }
 
     // listen de email -- cada canal terá seu prórpio listen
-@KafkaListener(topicPartitions = @TopicPartition(topic = "notification-stream", partitions = {"0", "1"}))
+@KafkaListener(topicPartitions = @TopicPartition(topic = "notification-stream-mail", partitions = {"0", "1"}))
 public void listen(NotificationEntity message) {
     try {
         emailService.send(message);
@@ -48,7 +56,21 @@ public void listen(NotificationEntity message) {
             notificationRepository.save(d);
         });
     } catch (Throwable e) {
-        this.messagePending(message);
+        // this.messagePending(message);
+        kafkaTemplate.send("notification-retry",message);
+    }
+}
+@KafkaListener(topicPartitions = @TopicPartition(topic = "notification-stream-push", partitions = {"0", "1"}))
+public void listenPush(NotificationEntity message) {
+    try {
+        pushService.send(message);
+        this.messageSent(message);
+        notificationRepository.findById(message.getId()).ifPresent(d -> {
+        d.setStatus(StatusType.SENT);
+        notificationRepository.save(d);
+        });
+    } catch (Throwable e) {
+        // this.messagePending(message);
         kafkaTemplate.send("notification-retry",message);
     }
 }
@@ -56,13 +78,16 @@ public void listen(NotificationEntity message) {
 public void listenRetry(NotificationEntity message) {
     try {
         Thread.sleep(10000);
-        emailService.send(message);
-        this.messageSent(message);
+        if (message.getType() == ChannelType.EMAIL) {
+            emailService.send(message);
+        } else {
+            pushService.send(message);
+        } 
     } catch (Throwable e) {
         this.messageFailed(message);
     } finally{
             this.saveMessage(message);
-     
+        
     }
 }
 
