@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import com.SpringNotificationHub.NotificationServ.model.NotificationEntity;
@@ -42,10 +43,27 @@ public void listen(NotificationEntity message) {
     try {
         emailService.send(message);
         this.messageSent(message);
-    } catch (Exception e) {
-        this.messageFailed(message);
+        notificationRepository.findById(message.getId()).ifPresent(d -> {
+            d.setStatus(StatusType.SENT);
+            notificationRepository.save(d);
+        });
+    } catch (Throwable e) {
+        this.messagePending(message);
+        kafkaTemplate.send("notification-retry",message);
     }
-    this.saveMessage(message);
+}
+@KafkaListener(topicPartitions = @TopicPartition(topic = "notification-retry", partitions = {"0", "1"}))
+public void listenRetry(NotificationEntity message) {
+    try {
+        Thread.sleep(10000);
+        emailService.send(message);
+        this.messageSent(message);
+    } catch (Throwable e) {
+        this.messageFailed(message);
+    } finally{
+            this.saveMessage(message);
+     
+    }
 }
 
     public void messageSent(NotificationEntity notificationEntity){
@@ -53,6 +71,9 @@ public void listen(NotificationEntity message) {
     }
     public void messageFailed(NotificationEntity notificationEntity){
         notificationEntity.setStatus(StatusType.FAILED);
+    }
+    public void messagePending(NotificationEntity notificationEntity){
+        notificationEntity.setStatus(StatusType.PENDING);
     }
 
     public void saveMessage(NotificationEntity notificationEntity){

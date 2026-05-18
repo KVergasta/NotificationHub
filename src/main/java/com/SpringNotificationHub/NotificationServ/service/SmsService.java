@@ -3,6 +3,7 @@ package com.SpringNotificationHub.NotificationServ.service;
 import org.springframework.stereotype.Service;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.mail.MessagingException;
 import com.SpringNotificationHub.NotificationServ.model.BroadcastChannel;
 import com.SpringNotificationHub.NotificationServ.model.NotificationEntity;
 import com.SpringNotificationHub.NotificationServ.model.ChannelType;
@@ -13,7 +14,7 @@ import com.SpringNotificationHub.NotificationServ.model.ChannelType;
 public class SmsService implements BroadcastChannel{
 
     @Override
-     public String send(NotificationEntity message) {
+     public String send(NotificationEntity message)  throws MessagingException {
         return  message.getMessage();
     }
 

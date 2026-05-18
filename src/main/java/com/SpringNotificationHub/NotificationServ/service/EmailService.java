@@ -11,10 +11,10 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import lombok.Getter;
 import lombok.Setter;
-
 import com.SpringNotificationHub.NotificationServ.model.BroadcastChannel;
 import com.SpringNotificationHub.NotificationServ.model.NotificationEntity;
 
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 import com.SpringNotificationHub.NotificationServ.model.ChannelType;
@@ -41,8 +41,7 @@ public class EmailService implements BroadcastChannel {
     }
 
     @Override
-    public String send(NotificationEntity notificationEntit) {
-        try{
+    public String send(NotificationEntity notificationEntit) throws MessagingException {
 
             JavaMailSender chosenSender = notificationEntit.getInfoUser().contains("@gmail.com") ? gmailSender : outlookSender;
 
@@ -65,9 +64,7 @@ public class EmailService implements BroadcastChannel {
             chosenSender.send(mimeMessage);
             
             return  "The message is send";
-        } catch (Exception e){
-            return "The message didn't send";
-        }
+
     }
 
     @Override
