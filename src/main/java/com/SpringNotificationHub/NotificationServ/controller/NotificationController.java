@@ -25,6 +25,8 @@ import com.SpringNotificationHub.NotificationServ.model.TypeEntity;
 import com.SpringNotificationHub.NotificationServ.service.GeneratorNotification;
 import com.SpringNotificationHub.NotificationServ.service.StreamService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 
 @CrossOrigin(origins = "http://localhost:4300")
 @RestController
@@ -39,15 +41,18 @@ public class NotificationController {
 
 @PostMapping("/generator")
     public ResponseEntity<?> notification (
-        @RequestBody NotificationEntity notificationEntity
+        @RequestBody NotificationEntity notificationEntity,
+        HttpServletRequest request
     ){
+            String ipAddress = request.getRemoteAddr();
+
             BroadcastChannel bc = broadcastChannel.stream()
             .filter(channel -> channel.type() == notificationEntity.getType())
             .findFirst()
             .orElseThrow(() -> new NotFoundException("Channel not found for type: " + notificationEntity.getType()));
 
             String type = bc.type().name();
-            String resultMessage = generatorNotification.generatorMsg(notificationEntity);
+            String resultMessage = generatorNotification.generatorMsg(notificationEntity, ipAddress);
 
             Map<String, String> response = new HashMap<>();
             response.put("message", resultMessage);
@@ -66,7 +71,13 @@ public class NotificationController {
             .body(generatorNotification.getAllTypes());
         }
 
-@GetMapping("/listNotifications")
+    @GetMapping("/todayByIp")
+    public ResponseEntity<List<NotificationEntity>> getToday(HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        return ResponseEntity.ok(generatorNotification.getMyTodayNotifications(ipAddress));
+    }
+
+@GetMapping("/listAllNotifications")
         public ResponseEntity<List<NotificationEntity>> getAllNotifications(){
             return ResponseEntity
             .status(HttpStatus.OK)

@@ -1,5 +1,8 @@
 package com.SpringNotificationHub.NotificationServ.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +45,8 @@ public GeneratorNotification(TypeRepository typeRepository,
 }
 
 
-    public String generatorMsg (NotificationEntity notification){
+    public String generatorMsg (NotificationEntity notification, String ip){
+        notification.setUserIp(ip);
         return broadcasts.stream()
             .filter(channel -> channel.type() == notification.getType())
             .findFirst()
@@ -52,7 +56,12 @@ public GeneratorNotification(TypeRepository typeRepository,
                 return "Message status: " + notification.getStatus().toString();
             })
             .orElseThrow(() -> new RuntimeException("No channel found for type: " + notification.getType()));
-            
+    }
+
+    public List<NotificationEntity> getMyTodayNotifications(String currentIp) {
+        LocalDateTime start = LocalDate.now().atStartOfDay();
+        LocalDateTime end = LocalDate.now().atTime(LocalTime.MAX);
+        return notificationRepository.findTodayNotificationsByIp(currentIp, start, end);
     }
 
     public NotificationEntity saveNotification(NotificationEntity notificationEntity){

@@ -1,6 +1,7 @@
 package com.SpringNotificationHub.NotificationServ.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -10,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,8 +46,18 @@ public class NotificationEntity implements Serializable {
     @Column(name = "user_account", nullable = false)
     private String infoUser;
 
+    @Column(name = "date", nullable=false)
+    private LocalDateTime date;
+
+    @Column(name = "user_ip")
+    private String userIp;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private StatusType status = StatusType.PENDING;
 
+    @PrePersist
+    protected  void  onCreate(){
+        this.date = LocalDateTime.now();
+    }
 }
