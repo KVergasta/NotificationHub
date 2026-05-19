@@ -50,34 +50,31 @@ public class StreamService {
 public void listen(NotificationEntity message) {
     try {
         emailService.send(message);
-        this.messageSent(message);
         notificationRepository.findById(message.getId()).ifPresent(d -> {
             d.setStatus(StatusType.SENT);
             notificationRepository.save(d);
         });
     } catch (Throwable e) {
-        // this.messagePending(message);
         kafkaTemplate.send("notification-retry",message);
     }
 }
+
 @KafkaListener(topicPartitions = @TopicPartition(topic = "notification-stream-push", partitions = {"0", "1"}))
 public void listenPush(NotificationEntity message) {
     try {
         pushService.send(message);
-        this.messageSent(message);
         notificationRepository.findById(message.getId()).ifPresent(d -> {
-        d.setStatus(StatusType.SENT);
-        notificationRepository.save(d);
+            d.setStatus(StatusType.SENT);
+            notificationRepository.save(d);
         });
     } catch (Throwable e) {
-        // this.messagePending(message);
         kafkaTemplate.send("notification-retry",message);
     }
 }
+
 @KafkaListener(topicPartitions = @TopicPartition(topic = "notification-retry", partitions = {"0", "1"}))
 public void listenRetry(NotificationEntity message) {
     try {
-        Thread.sleep(10000);
         if (message.getType() == ChannelType.EMAIL) {
             emailService.send(message);
         } else {
