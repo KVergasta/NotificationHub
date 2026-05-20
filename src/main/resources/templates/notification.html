@@ -62,6 +62,10 @@
             margin-top: 20px;
             color: #7f8c8d;
         }
+        p{
+            font-size: 15px;
+        }
+
     </style>
 </head>
 <body>
@@ -71,15 +75,10 @@
         </div>
 
         <div class="content">
-            <h2>Olá!</h2>
-            <p>Você recebeu uma nova atualização através da nossa API.</p>
-            
-            <div class="message-box">
-                <h3 th:text="${title}"></h3>
-                <p th:text="${messageContent}">A nossa api veio te mandar uma notificação pelo seu e-mail.</p>
-            </div>
 
-            <p>Esta é uma notificação automática gerada pelo sistema de despacho.</p>
+                <h2 th:text="${title}"></h2>
+                <p th:text="${messageContent}">A nossa api veio te mandar uma notificação pelo seu e-mail.</p>
+
         </div>
 
         <div class="footer">

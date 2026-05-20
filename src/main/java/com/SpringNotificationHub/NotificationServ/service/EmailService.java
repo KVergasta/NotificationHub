@@ -27,25 +27,20 @@ public class EmailService implements BroadcastChannel {
     private String admMailAddress;
 
     private final JavaMailSender gmailSender;
-    private final JavaMailSender outlookSender;
     private final TemplateEngine templateEngine;
 
     public EmailService(
         @Qualifier("gmailSender") JavaMailSender gmailSender, 
-        @Qualifier("outlookSender") JavaMailSender outlookSender,
         TemplateEngine templateEngine
     ){
         this.gmailSender = gmailSender;
-        this.outlookSender = outlookSender;
         this.templateEngine = templateEngine;
     }
 
     @Override
     public String send(NotificationEntity notificationEntit) throws MessagingException {
 
-            JavaMailSender chosenSender = notificationEntit.getInfoUser().contains("@gmail.com") ? gmailSender : outlookSender;
-
-            MimeMessage mimeMessage = chosenSender.createMimeMessage();
+            MimeMessage mimeMessage = gmailSender.createMimeMessage();
             Context context = new Context();
             context.setVariable("username", notificationEntit.getInfoUser()); 
             context.setVariable("messageContent", notificationEntit.getMessage());
@@ -57,11 +52,11 @@ public class EmailService implements BroadcastChannel {
                 StandardCharsets.UTF_8.name()
             );
             helper.setTo(notificationEntit.getInfoUser());
-            helper.setFrom(chosenSender == gmailSender ? admMailAddress : "notif.hub@outlook.com");
-            helper.setSubject(notificationEntit.getTitle()+" - API Notification Hub");
+            helper.setFrom("notificationhubservice@gmail.com");
+            helper.setSubject(notificationEntit.getTitle());
             helper.setText(process,true);
 
-            chosenSender.send(mimeMessage);
+            gmailSender.send(mimeMessage);
             
             return  "The message is send";
 

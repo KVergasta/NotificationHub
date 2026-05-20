@@ -39,7 +39,7 @@ public class StreamService {
         int partition = random.nextInt(2); // Randomly select partition 0 or 1
         if (message.getType() == ChannelType.EMAIL) {
             kafkaTemplate.send("notification-stream-mail", partition, null, message);
-        } else {
+        } else if (message.getType() == ChannelType.PUSH) {
             kafkaTemplate.send("notification-stream-push", partition, null, message);
         }
         return message.getStatus().toString();
@@ -50,10 +50,11 @@ public class StreamService {
 public void listen(NotificationEntity message) {
     try {
         emailService.send(message);
-        notificationRepository.findById(message.getId()).ifPresent(d -> {
-            d.setStatus(StatusType.SENT);
-            notificationRepository.save(d);
-        });
+        message.setStatus(StatusType.SENT);
+        // notificationRepository.findById(message.getId()).ifPresent(d -> {
+            // d.setStatus(StatusType.SENT);
+            notificationRepository.save(message);
+        // });
     } catch (Throwable e) {
         kafkaTemplate.send("notification-retry",message);
     }
@@ -81,22 +82,12 @@ public void listenRetry(NotificationEntity message) {
             pushService.send(message);
         } 
     } catch (Throwable e) {
-        this.messageFailed(message);
+        message.setStatus(StatusType.FAILED);
     } finally{
             this.saveMessage(message);
         
     }
 }
-
-    public void messageSent(NotificationEntity notificationEntity){
-        notificationEntity.setStatus(StatusType.SENT);
-    }
-    public void messageFailed(NotificationEntity notificationEntity){
-        notificationEntity.setStatus(StatusType.FAILED);
-    }
-    public void messagePending(NotificationEntity notificationEntity){
-        notificationEntity.setStatus(StatusType.PENDING);
-    }
 
     public void saveMessage(NotificationEntity notificationEntity){
         notificationRepository.save(notificationEntity);

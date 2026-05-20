@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import lombok.Getter;
+
 @Configuration
 public class MailConfig {
     
@@ -25,26 +27,5 @@ public class MailConfig {
         return mailSender;
     
     }
-
- @Bean(name="outlookSender")
-public JavaMailSender outlookSender(){
-    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-    // mailSender.setHost("smtp.office365.com");
-    mailSender.setHost("smtp-mail.outlook.com");
-    mailSender.setPort(587);
-    mailSender.setUsername("notif.hub@outlook.com");
-    mailSender.setPassword("edzsrjxxsbjryfqv");
-
-    Properties props = mailSender.getJavaMailProperties();
-    props.put("mail.smtp.auth", "true");
-    props.put("mail.smtp.starttls.enable", "true");
-    props.put("mail.smtp.starttls.required", "true"); // Obrigatório para Office365
-    
-    // Adicione estas linhas para evitar erros de handshake SSL/TLS
-    props.put("mail.debug", "true"); // Ative o debug para ver o log real no console
-    props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-    
-    return mailSender;
-}
 
 }
