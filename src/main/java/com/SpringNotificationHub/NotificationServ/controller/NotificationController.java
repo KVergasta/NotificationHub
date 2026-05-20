@@ -26,7 +26,7 @@ import com.SpringNotificationHub.NotificationServ.service.GeneratorNotification;
 import jakarta.servlet.http.HttpServletRequest;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:4300"})
 @RestController
 @RequestMapping("/api/notification")
 public class NotificationController {
