@@ -6,9 +6,10 @@ import lombok.Setter;
 import jakarta.mail.MessagingException;
 import com.SpringNotificationHub.NotificationServ.model.BroadcastChannel;
 import com.SpringNotificationHub.NotificationServ.model.NotificationEntity;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.Message;
 import com.SpringNotificationHub.NotificationServ.model.ChannelType;
 import nl.martijndwars.webpush.Notification;
-import nl.martijndwars.webpush.PushService;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.security.Security;
 import java.util.concurrent.Flow.Subscription;
@@ -17,24 +18,32 @@ import java.util.concurrent.Flow.Subscription;
 @Setter
 @Service
 public class PushService implements BroadcastChannel{
-    private String numero;
-    private PushService pushService;
 
-    public PushService(String string, String string2, String string3){
-
-        Security.addProvider(new BouncyCastleProvider());
-        
-        this.pushService = new PushService(
-            "BHBE8HHXk5Yhs-qI0opfFu-Zi2UdDT3KL7vGXrOtX0GnkwUlBzfpTKVTDHjiHb3-VWNOXzwEMnTPCbZpGmfLleI",
-            "malH9rJgHiqTBnRoHUhXpoVxn1SgzrmcKGW6m8YxVmQ",
-            "mailto:notificationhubservice@gmail.com"
-        );
-    }
 
     @Override
-     public String send(NotificationEntity message)  throws MessagingException {
+     public String send(NotificationEntity notificationEntity)  throws MessagingException {
 
-        return  message.getMessage();
+        return  notificationEntity.getMessage();
+    }
+
+    public boolean pushMessage(NotificationEntity notification, String recipientToken){
+        try{
+            Message message = Message.builder()
+            .setToken(recipientToken)
+            .setNotification(Notification.builder()
+                .setTitle(notification.getTitle())
+                .setBody(notification.getMessage())
+                .build())
+            .build();
+            
+            String response = FirebaseMessaging.getInstance().send(message);
+            System.out.println("Mensagem enviado com sucesso " + response);
+
+            return true;
+        } catch (FirebaseMessagingException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
      @Override
