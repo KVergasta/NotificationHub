@@ -15,8 +15,8 @@ public class FirebaseMessagingConfig {
 
     @Bean
     public FirebaseMessaging firebaseMessaging() throws IOException {
+// Adicione o nome da pasta na frente do caminho
         InputStream serviceAccount = getClass().getClassLoader().getResourceAsStream("notificationhub-d9fb5-firebase-adminsdk-fbsvc-5f1e13eed5.json");
-
         if (serviceAccount == null) {
             throw new IllegalArgumentException("O arquivo 'Service Account' não foi encontrado ");
         }
@@ -25,7 +25,12 @@ public class FirebaseMessagingConfig {
             .setCredentials(GoogleCredentials.fromStream(serviceAccount))
             .build();
 
-        FirebaseApp app = FirebaseApp.initializeApp(options);
+        FirebaseApp app;
+            if (FirebaseApp.getApps().isEmpty()) {
+                app = FirebaseApp.initializeApp(options);
+            } else {
+                app = FirebaseApp.getInstance();
+            }
 
         return FirebaseMessaging.getInstance(app);
     }

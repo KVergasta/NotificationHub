@@ -38,7 +38,7 @@ public class NotificationController {
     private List<BroadcastChannel> broadcastChannel;
 
 @PostMapping("/mail")
-    public ResponseEntity<?> notification (
+    public ResponseEntity<?> mailNotification (
         @RequestBody NotificationEntity notificationEntity,
         HttpServletRequest request
     ){

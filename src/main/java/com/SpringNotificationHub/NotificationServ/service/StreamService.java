@@ -76,6 +76,9 @@ public void listenPush(NotificationEntity message) {
 @KafkaListener(topicPartitions = @TopicPartition(topic = "notification-retry", partitions = {"0", "1"}))
 public void listenRetry(NotificationEntity message) {
     try {
+        if(message.getInfoUser()==null || message.getInfoUser().isEmpty()){
+            System.err.println("O campo infoUser está vazio");
+        }
         if (message.getType() == ChannelType.EMAIL) {
             emailService.send(message);
         } else {

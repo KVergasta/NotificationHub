@@ -7,11 +7,12 @@ import jakarta.mail.MessagingException;
 import com.SpringNotificationHub.NotificationServ.model.BroadcastChannel;
 import com.SpringNotificationHub.NotificationServ.model.NotificationEntity;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.SpringNotificationHub.NotificationServ.model.ChannelType;
-import nl.martijndwars.webpush.Notification;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.security.Security;
+import com.google.firebase.messaging.Notification;
 import java.util.concurrent.Flow.Subscription;
 
 @Getter
