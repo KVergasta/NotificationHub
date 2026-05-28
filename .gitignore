@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+src/main/resources/notificationhub-d9fb5-firebase-adminsdk-fbsvc-5f1e13eed5.json
