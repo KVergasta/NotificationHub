@@ -15,7 +15,7 @@ public class FirebaseMessagingConfig {
 
     @Bean
     public FirebaseMessaging firebaseMessaging() throws IOException {
-        InputStream serviceAccount = getClass().getClassLoader().getResourceAsStream("notificationhub-d9fb5-firebase-adminsdk-fbsvc-5f1e13eed5.json");
+        InputStream serviceAccount = getClass().getClassLoader().getResourceAsStream("notificationhub-d9fb5-firebase-adminsdk-fbsvc-9700efd232.json");
         if (serviceAccount == null) {
             throw new IllegalArgumentException("O arquivo 'Service Account' não foi encontrado ");
         }
