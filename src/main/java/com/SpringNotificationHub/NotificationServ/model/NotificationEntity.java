@@ -19,7 +19,16 @@ public class NotificationEntity {
     
     private String title;
     private String message;
-    
+    private String userIp;
+
+    // E adicione estes dois métodos no final do seu arquivo
+    public String getUserIp() {
+        return userIp;
+    }
+
+    public void setUserIp(String userIp) {
+        this.userIp = userIp;
+    }
     // Verifique se o seu atributo original se chama "type" ou "channelType"
     @Enumerated(EnumType.STRING)
     private ChannelType type; 
