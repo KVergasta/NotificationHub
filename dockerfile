@@ -1,12 +1,16 @@
-# Etapa 1: Build (Usa uma imagem que já vem com Maven e Java 21 instalados)
+# Etapa 1: Build (Mantém igual)
 FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
-# Etapa 2: Execução (Usa uma imagem super leve apenas com o Java runtime para rodar o app)
+# Etapa 2: Execução (Ajustada para fixar a porta 8000)
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
+
+# 1. Avisa a Render que a porta usada é a 8000
 EXPOSE 8000
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# 2. Força o Java a injetar a porta 8000 na inicialização do Spring
+ENTRYPOINT ["java", "-Dserver.port=8000", "-jar", "app.jar"]
