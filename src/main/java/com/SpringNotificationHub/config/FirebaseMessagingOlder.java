@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Configuration
-public class FirebaseMessagingOlder {
+public class firebaseMessagingOlder {
 
     @Value("${app.firebase.config-path}")
     private String configPath;
