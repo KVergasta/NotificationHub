@@ -12,14 +12,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Configuration
-public class firebaseMessagingOlder {
+public class FirebaseMessagingOlder {
 
     @Value("${app.firebase.config-path}")
     private String configPath;
 
     @Bean
-    public FirebaseMessaging firebaseMessagingOlder() throws IOException {
-        InputStream serviceAccount;
+    public FirebaseMessaging firebaseMessaging() throws IOException {        
+    InputStream serviceAccount;
         
         // Se o caminho começar com /etc/secrets (ambiente da Render), lê como arquivo do sistema
         if (configPath.startsWith("/etc/secrets") || configPath.contains("/") || configPath.contains("\\")) {
