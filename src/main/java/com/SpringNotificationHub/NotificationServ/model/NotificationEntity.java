@@ -20,7 +20,16 @@ public class NotificationEntity {
     private String title;
     private String message;
     private String userIp;
+    private java.time.LocalDateTime date;
 
+    // Adicione os métodos acessores no final da classe
+    public java.time.LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(java.time.LocalDateTime date) {
+        this.date = date;
+    }
     // E adicione estes dois métodos no final do seu arquivo
     public String getUserIp() {
         return userIp;
