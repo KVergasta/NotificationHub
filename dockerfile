@@ -4,13 +4,10 @@ WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
-# Etapa 2: Execução (Ajustada para fixar a porta 8000)
+# Etapa 2: Execução (Ajustada para leitura dinâmica de portas)
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
-# 1. Avisa a Render que a porta usada é a 8000
-EXPOSE 8000
-
-# 2. Força o Java a injetar a porta 8000 na inicialização do Spring
-ENTRYPOINT ["java", "-Dserver.port=8000", "-jar", "app.jar"]
+# Removemos o EXPOSE fixo para que a Render gerencie a porta dinamicamente
+CMD ["java", "-jar", "app.jar"]
