@@ -3,39 +3,44 @@ package com.SpringNotificationHub.config;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
-import java.io.ByteArrayInputStream;
+import org.springframework.context.annotation.Bean;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Configuration
 public class FirebaseConfig {
 
-    @PostConstruct
-    public void initializeFirebase() {
-        try {
-            // Captura o texto do JSON direto da variável de ambiente da Render
-            String firebaseJson = System.getenv("FIREBASE_CONFIG_JSON");
+    @Value("${app.firebase.config-path}")
+    private String configPath;
 
-            if (firebaseJson == null || firebaseJson.isEmpty()) {
-                System.out.println("⚠️ Variável FIREBASE_CONFIG_JSON não foi encontrada no ambiente.");
-                return;
-            }
-
-            // Configura as opções de conexão com o Firebase usando o texto lido da memória
-            FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(new ByteArrayInputStream(firebaseJson.getBytes())))
-                    .build();
-
-            // Evita que o Spring tente inicializar o Firebase duplicado caso a aplicação reinicie
-            if (FirebaseApp.getApps().isEmpty()) {
-                FirebaseApp.initializeApp(options);
-                System.out.println("✅ Firebase inicializado com sucesso na nuvem!");
-            }
-            
-        } catch (IOException e) {
-            System.err.println("❌ Erro ao tentar ler as credenciais do Firebase: " + e.getMessage());
+    @Bean
+    public FirebaseMessaging firebaseMessaging() throws IOException {
+        InputStream serviceAccount;
+        
+        // Se o caminho começar com /etc/secrets (ambiente da Render), lê como arquivo do sistema
+        if (configPath.startsWith("/etc/secrets") || configPath.contains("/") || configPath.contains("\\")) {
+            serviceAccount = new FileInputStream(configPath);
+        } else {
+            // Caso contrário, tenta ler do classpath local
+            serviceAccount = getClass().getClassLoader().getResourceAsStream(configPath);
         }
+
+        if (serviceAccount == null) {
+            throw new IllegalArgumentException("O arquivo 'Service Account' não foi encontrado no caminho: " + configPath);
+        }
+
+        FirebaseOptions options = FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .build();
+
+        if (FirebaseApp.getApps().isEmpty()) {
+            FirebaseApp.initializeApp(options);
+        }
+
+        return FirebaseMessaging.getInstance();
     }
 }
