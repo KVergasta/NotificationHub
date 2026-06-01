@@ -31,4 +31,13 @@ build/
 
 ### VS Code ###
 .vscode/
+<<<<<<< HEAD
 src/main/resources/notificationhub-d9fb5-firebase-adminsdk-fbsvc-95711e229d.json
+=======
+<<<<<<< HEAD
+src/main/java/com/SpringNotificationHub/config/FirebaseMessagingConfig.java
+src/main/resources/notificationhub-d9fb5-firebase-adminsdk-fbsvc-9700efd232.json
+=======
+src/main/resources/notificationhub-d9fb5-firebase-adminsdk-fbsvc-cb310414e9.json
+>>>>>>> 3bb8ccc9d488a1c8f4e59a1df2169b9c99270659
+>>>>>>> 2db957885ec5e7d8da199e873c365ccdbbe40fe4

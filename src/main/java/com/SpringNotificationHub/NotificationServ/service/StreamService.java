@@ -13,6 +13,7 @@ import com.SpringNotificationHub.NotificationServ.model.ChannelType;
 import com.SpringNotificationHub.NotificationServ.model.NotificationEntity;
 import com.SpringNotificationHub.NotificationServ.model.StatusType;
 import com.SpringNotificationHub.NotificationServ.repository.NotificationRepository;
+import com.google.firebase.FirebaseApp;
 
 @Service
 public class StreamService {
@@ -47,7 +48,7 @@ public class StreamService {
 
     // listen de email -- cada canal terá seu prórpio listen
 @KafkaListener(topicPartitions = @TopicPartition(topic = "notification-stream-mail", partitions = {"0", "1"}))
-public void listen(NotificationEntity message) {
+public void listenMail(NotificationEntity message) {
     try {
         emailService.send(message);
         message.setStatus(StatusType.SENT);
@@ -64,11 +65,10 @@ public void listen(NotificationEntity message) {
 public void listenPush(NotificationEntity message) {
     try {
         pushService.send(message);
-        notificationRepository.findById(message.getId()).ifPresent(d -> {
-            d.setStatus(StatusType.SENT);
-            notificationRepository.save(d);
-        });
+        message.setStatus(StatusType.SENT);
+        notificationRepository.save(message);
     } catch (Throwable e) {
+        System.err.println("Erro ao enviar notificação push: " + e.getMessage());
         kafkaTemplate.send("notification-retry",message);
     }
 }
@@ -84,7 +84,7 @@ public void listenRetry(NotificationEntity message) {
         } else {
             pushService.send(message);
         } 
-    } catch (Throwable e) {
+    } catch (Throwable e ) {
         message.setStatus(StatusType.FAILED);
     } finally{
             this.saveMessage(message);
