@@ -1,63 +1,58 @@
 package com.SpringNotificationHub.NotificationServ.model;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.UUID;
 
-@Getter
-@Setter
 @Entity
-@Table(name = "notification")
-@NoArgsConstructor
-public class NotificationEntity implements Serializable {
+@Table(name = "notifications") // ou o nome da sua tabela
+public class NotificationEntity {
 
-    private static final long serialVersionUID = 1L;
-    
-    // primary key
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    
-    // criação do id
     private UUID id;
     
-    // criação das colunas
-    @Column(name = "title", nullable = false)
     private String title;
-    
-    @Column(name = "type", nullable = false)
-    private ChannelType type;
-    
-    @Column(name = "message", nullable = false)
     private String message;
-    
-    @Column(name = "user_account", nullable = false)
-    private String infoUser;
+    private String type; // ou o tipo do seu Enum StatusType (ex: StatusType type)
 
-    @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    // Construtor Padrão (Obrigatório para o JPA)
+    public NotificationEntity() {}
 
-    @Column(name = "user_ip")
-    private String userIp;
+    // Getters e Setters Manuais
+    public UUID getId() {
+        return id;
+    }
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private StatusType status = StatusType.PENDING;
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
-    @PrePersist
-    protected  void  onCreate(){
-        this.date = LocalDateTime.now();
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    // Se o seu método retornar um Enum, ajuste o tipo de retorno aqui
+    public String getType() { 
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
